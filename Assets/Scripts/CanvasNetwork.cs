@@ -7,15 +7,21 @@ public class CanvasNetwork : NetworkBehaviour
     [SerializeField]
     private GameObject m_Brush;
 
-    private NetworkObject m_SpawnedBrush;
+    private GameObject m_InstatiatedBrush;
+
+    private NetworkObject m_NetworkBrush;
+
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        m_SpawnedBrush = GameObject.Instantiate(m_Brush,transform).GetComponent<NetworkObject>();
+        m_InstatiatedBrush = GameObject.Instantiate(m_Brush, transform);
 
-        Debug.Log(m_SpawnedBrush);
+        m_NetworkBrush = m_InstatiatedBrush.GetComponent<NetworkObject>();
+        
+        m_NetworkBrush.Spawn();
 
+        m_NetworkBrush.transform.localPosition = new Vector2 (0, 0);
     }
 }

@@ -15,6 +15,8 @@ public class Brush : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
+        transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform);
     }
 
 
