@@ -1,21 +1,70 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.SocialPlatforms.Impl;
+
+enum Roles
+{
+    NotAssigned = 0,
+    Leader = 1,
+    Follower = 2
+}
 
 public class Brush3d : NetworkBehaviour
 {
     [SerializeField]
     private float mSpeed = 5f;
 
+    [SerializeField]
+    private MeshRenderer mMeshRenderer;
+
+    [SerializeField]
+    private NetworkObject mNetworkObject;
+
+    Roles mRole = Roles.NotAssigned;
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (mNetworkObject.IsOwnedByServer)
+        {
+            mRole = Roles.Leader;
+        }
+        else
+        {
+            mRole = Roles.Follower;
+        }
+
+        InitializePlayer();
+    }
+
+    private void InitializePlayer()
+    {
+        if (mRole == Roles.Leader)
+        {
+            mMeshRenderer.enabled = true;
+        }
+        else
+        {
+            mMeshRenderer.enabled = false;
+        }
+    }
+
     void Update()
     {
-        // Get input from arrow keys or WASD keys
-        float moveX = Input.GetAxis("Horizontal"); // A/D or Left/Right Arrow
-        float moveY = Input.GetAxis("Vertical");   // W/S or Up/Down Arrow
+        if (mRole == Roles.Leader)
+        {
+            // Get input from arrow keys or WASD keys
+            float moveX = Input.GetAxis("Horizontal"); // A/D or Left/Right Arrow
+            float moveY = Input.GetAxis("Vertical");   // W/S or Up/Down Arrow
 
-        // Create a movement vector
-        Vector3 movement = new Vector3(moveX, moveY, 0f);
+            // Create a movement vector
+            Vector3 movement = new Vector3(moveX, moveY, 0f);
 
-        // Move the object in the X and Y directions
-        transform.Translate(movement * mSpeed * Time.deltaTime, Space.World);
+            // Move the object in the X and Y directions
+            transform.Translate(movement * mSpeed * Time.deltaTime, Space.World);
+        }
     }
+
+
 }
