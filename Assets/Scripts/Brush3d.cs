@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.SocialPlatforms.Impl;
 
-enum Roles
+public enum Roles
 {
     NotAssigned = 0,
     Leader = 1,
@@ -20,7 +20,9 @@ public class Brush3d : NetworkBehaviour
     [SerializeField]
     private NetworkObject mNetworkObject;
 
-    Roles mRole = Roles.NotAssigned;
+    private Roles mRole = Roles.NotAssigned;
+
+    public Roles Role { get { return mRole; } set { mRole = value; } }
 
     public override void OnNetworkSpawn()
     {
