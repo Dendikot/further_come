@@ -9,6 +9,7 @@ public enum Roles
     Follower = 2
 }
 
+
 public class Brush3d : NetworkBehaviour
 {
     [SerializeField]
@@ -67,6 +68,4 @@ public class Brush3d : NetworkBehaviour
             transform.Translate(movement * mSpeed * Time.deltaTime, Space.World);
         }
     }
-
-
 }
