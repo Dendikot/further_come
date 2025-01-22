@@ -188,3 +188,6 @@ MonoBehaviour:
   mSpeed: 5
   mMeshRenderer: {fileID: 4232762331282719414}
   mNetworkObject: {fileID: 8717740878321162744}
+  mPlayerInitialized:
+    m_PersistentCalls:
+      m_Calls: []

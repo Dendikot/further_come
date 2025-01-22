@@ -470,6 +470,7 @@ MonoBehaviour:
   gridY: 5
   objectCount: 80
   cellSize: 1
+  mNetworkManager: {fileID: 1647951108}
 --- !u!1 &914435987
 GameObject:
   m_ObjectHideFlags: 0

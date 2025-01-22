@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Unity.Netcode;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -9,14 +9,28 @@ using UnityEngine;
 //
 public class GameManager : MonoBehaviour
 {
-    public GameObject objectPrefab; // Prefab to instantiate
-    public int gridX = 5;          // Number of columns
-    public int gridY = 5;          // Number of rows
-    public int objectCount = 10;   // Number of objects to place
-    public float cellSize = 1f;    // Size of each grid cell
+    //Map data
+    [SerializeField] private GameObject objectPrefab; // Prefab to instantiate
+    [SerializeField] private int gridX = 5;          // Number of columns
+    [SerializeField] private int gridY = 5;          // Number of rows
+    [SerializeField] private int objectCount = 10;   // Number of objects to place
+    [SerializeField] private float cellSize = 1f;    // Size of each grid cell
 
-    private void Start()
+    [SerializeField] private NetworkManager mNetworkManager;
+
+    //Network
+    //[SerializeField] private NetworkManager mNetworkManager;
+
+    Vector2[] gridPositions;
+
+    private void Awake()
     {
+        mNetworkManager.OnServerStarted += onSessionStarted;
+    }
+
+    private void onSessionStarted()
+    {
+        Debug.Log("Session started");
         PopulateGrid();
     }
 
@@ -30,7 +44,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Create a list of all available grid positions
-        Vector2[] gridPositions = new Vector2[gridCount];
+        gridPositions = new Vector2[gridCount];
         int index = 0;
         for (int x = -gridX; x < gridX; x++)
         {
