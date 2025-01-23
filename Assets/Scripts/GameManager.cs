@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Session started");
         PopulateGrid();
+
     }
 
     private void PopulateGrid()
