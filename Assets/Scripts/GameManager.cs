@@ -16,10 +16,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int objectCount = 10;   // Number of objects to place
     [SerializeField] private float cellSize = 1f;    // Size of each grid cell
 
+    //Network
     [SerializeField] private NetworkManager mNetworkManager;
 
-    //Network
-    //[SerializeField] private NetworkManager mNetworkManager;
+    //Timer
+    [SerializeField] private Timer mTimer;
 
     Vector2[] gridPositions;
 
@@ -31,11 +32,13 @@ public class GameManager : MonoBehaviour
     private void onSessionStarted()
     {
         Debug.Log("Session started");
-        PopulateGrid();
-
+        //PopulateGrid();
+        mTimer.StartTimer(5f);
     }
 
-    private void PopulateGrid()
+
+
+    public void PopulateGrid()
     {
         int gridCount = (gridX * 2) * (gridY * 2);
         if (objectCount >gridCount)

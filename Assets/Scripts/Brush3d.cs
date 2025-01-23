@@ -2,7 +2,6 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.Events;
-using System.Diagnostics;
 
 public enum Roles
 {
@@ -34,11 +33,14 @@ public class Brush3d : NetworkBehaviour
 
         mRole = mNetworkObject.IsOwnedByServer ? Roles.Leader : Roles.Follower;
 
+        Timer.Instance.timerFinished.AddListener(switchRole);
+
         InitializePlayer();
     }
 
     private void switchRole()
     {
+        Debug.Log("Switch role");
         mRole = mRole == Roles.Leader ? Roles.Follower : Roles.Leader ;
         InitializePlayer();
     }
@@ -57,11 +59,6 @@ public class Brush3d : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SwitchRoleActivateClientRpc();
-        }
-
         if (mRole == Roles.Leader)
         {
             // Get input from arrow keys or WASD keys
