@@ -22,7 +22,11 @@ public class GameManager : MonoBehaviour
     //Timer
     [SerializeField] private Timer mTimer;
 
-    Vector2[] gridPositions;
+    private Vector2[] gridPositions;
+
+    public Vector2[] GridPositions {  get { return gridPositions; } }
+
+    private Brush3d mBrush3d;
 
     private void Awake()
     {
@@ -32,11 +36,19 @@ public class GameManager : MonoBehaviour
     private void onSessionStarted()
     {
         Debug.Log("Session started");
-        //PopulateGrid();
-        mTimer.StartTimer(5f);
+        PopulateGrid();
+        mTimer.StartTimer(2500f);
+        mBrush3d = FindFirstObjectByType<Brush3d>();
     }
 
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L) && mNetworkManager.IsServer)
+        {
+            Debug.Log("IS SERVER");
+            mBrush3d.SendVectorsServerRpc(GridPositions, 1);
+        }
+    }
 
     public void PopulateGrid()
     {

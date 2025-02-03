@@ -22,6 +22,9 @@ public class Brush3d : NetworkBehaviour
     [SerializeField]
     private NetworkObject mNetworkObject;
 
+    [SerializeField]
+    private GameManager mGameManager;
+
     private Roles mRole = Roles.NotAssigned;
 
     public Roles Role { get { return mRole; } set { mRole = value; } }
@@ -44,6 +47,18 @@ public class Brush3d : NetworkBehaviour
         mRole = mRole == Roles.Leader ? Roles.Follower : Roles.Leader ;
         InitializePlayer();
     }
+
+    private void initializeMap()
+    {
+        if (mNetworkObject.IsOwnedByServer)
+        {
+            // create map here
+        }
+    }
+
+    // create a method that would send the map to the other player
+    // create map from received player
+    // 
 
     private void InitializePlayer()
     {
@@ -79,6 +94,27 @@ public class Brush3d : NetworkBehaviour
        switchRole();
     }
 
+    [ServerRpc]
+    public void SendVectorsServerRpc(Vector2[] vectors, ulong clientId)
+    {
+        SendVectorsClientRpc(vectors, clientId);
+    }
 
+    [ClientRpc]
+    private void SendVectorsClientRpc(Vector2[] vectors, ulong targetClientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == targetClientId)
+        {
+            HandleReceivedVectors(vectors);
+        }
+    }
+
+    private void HandleReceivedVectors(Vector2[] vectors)
+    {
+        foreach (Vector3 v in vectors)
+        {
+            Debug.Log("Received Vector: " + v);
+        }
+    }
     //public void SendData()
 }
