@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UIElements;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -13,7 +14,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject objectPrefab; // Prefab to instantiate
     [SerializeField] private int gridX = 5;          // Number of columns
     [SerializeField] private int gridY = 5;          // Number of rows
-    [SerializeField] private int objectCount = 10;   // Number of objects to place
+    [SerializeField] private int objectCount = 10;   // Number of objects to generate
+    [SerializeField] private int objectsSpawned = 4;   // Number of objects to spawnd
     [SerializeField] private float cellSize = 1f;    // Size of each grid cell
 
     //Network
@@ -22,21 +24,88 @@ public class GameManager : MonoBehaviour
     //Timer
     [SerializeField] private Timer mTimer;
 
-    Vector2[] gridPositions;
+    private Vector2[] gridPositions;
+    public Vector2[] GridPositions {  get { return gridPositions; } set { gridPositions = value; } }
+
+    private Vector2[] spawnPositions;
+
+    private Brush3d mBrush3dLocalServer;
+    private Brush3d[] mBrushes = new Brush3d[2];
 
     private void Awake()
     {
-        mNetworkManager.OnServerStarted += onSessionStarted;
+        //mNetworkManager.OnServerStarted += onSessionStarted;
+        mNetworkManager.OnClientConnectedCallback += onClientConnected;
     }
+
+    private void onClientConnected(ulong clientId)
+    {
+        if(clientId == 1)
+        {
+            onSessionStarted();
+        }
+    }
+
 
     private void onSessionStarted()
     {
-        Debug.Log("Session started");
-        //PopulateGrid();
-        mTimer.StartTimer(5f);
+        mBrush3dLocalServer = getTheServer();
+        if (mBrush3dLocalServer.IsLocalPlayer) {
+            Debug.Log("Session started");
+            PopulateGrid();
+            mTimer.StartTimer(5f);
+            // switch role event subscribe here
+            // we switch 
+            mTimer.timerFinished.AddListener(onSecondRound);
+
+            mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
+        }
+    }
+
+    private void onSecondRound()
+    {
+        mBrush3dLocalServer.SwitchRoleClientRpc();
+    }
+
+    public void SwitchRoles()
+    {
+        foreach (var brush in mBrushes)
+        {
+            brush.SwitchRole();
+        }
     }
 
 
+    // might cause problems in the future when the server is transferred to the remote
+    private Brush3d getTheServer()
+    {
+        mBrushes = FindObjectsOfType<Brush3d>();
+
+        foreach (Brush3d obj in mBrushes)
+        {
+            if (obj.IsOwnedByServer) return obj;
+        }
+        return null;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L) && mNetworkManager.IsServer)
+        {
+            Debug.Log("IS SERVER");
+            mBrush3dLocalServer.SendVectorsServerRpc(GridPositions, 1);
+        }
+    }
+
+    public void InstantiateReceivedGrid(Vector2[] positions)
+    {
+        for (int i = 0; i < positions.Length; i++)
+        {
+            Vector2 position = positions[i];
+            GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, 0), Quaternion.identity, transform);
+            //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
+        }
+    }
 
     public void PopulateGrid()
     {
@@ -61,11 +130,16 @@ public class GameManager : MonoBehaviour
         // Shuffle the grid positions to ensure random placement
         ShuffleArray(gridPositions);
 
+        spawnPositions = new Vector2[objectsSpawned];
+
         // Place the objects
-        for (int i = 0; i < objectCount; i++)
+        for (int i = 0; i < objectsSpawned; i++)
         {
             Vector2 position = gridPositions[i];
-            Instantiate(objectPrefab, new Vector3(position.x, position.y, 0 ), Quaternion.identity, transform);
+            GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, 0 ), Quaternion.identity, transform);
+            spawnPositions[i] = position;
+            //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
+            //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role == Roles.Leader);
         }
     }
 

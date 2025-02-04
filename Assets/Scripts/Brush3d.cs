@@ -22,6 +22,9 @@ public class Brush3d : NetworkBehaviour
     [SerializeField]
     private NetworkObject mNetworkObject;
 
+    [SerializeField]
+    private GameManager mGameManager;
+
     private Roles mRole = Roles.NotAssigned;
 
     public Roles Role { get { return mRole; } set { mRole = value; } }
@@ -32,15 +35,13 @@ public class Brush3d : NetworkBehaviour
         base.OnNetworkSpawn();
 
         mRole = mNetworkObject.IsOwnedByServer ? Roles.Leader : Roles.Follower;
-
-        Timer.Instance.timerFinished.AddListener(switchRole);
+        mGameManager = FindFirstObjectByType<GameManager>();
 
         InitializePlayer();
     }
 
-    private void switchRole()
+    public void SwitchRole()
     {
-        Debug.Log("Switch role");
         mRole = mRole == Roles.Leader ? Roles.Follower : Roles.Leader ;
         InitializePlayer();
     }
@@ -74,11 +75,28 @@ public class Brush3d : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SwitchRoleActivateClientRpc()
+    public void SwitchRoleClientRpc()
     {
-       switchRole();
+        mGameManager.SwitchRoles();
     }
 
+    [ServerRpc]
+    public void SendVectorsServerRpc(Vector2[] vectors, ulong clientId)
+    {
+        SendVectorsClientRpc(vectors, clientId);
+    }
 
-    //public void SendData()
+    [ClientRpc]
+    private void SendVectorsClientRpc(Vector2[] vectors, ulong targetClientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == targetClientId)
+        {
+            HandleReceivedVectors(vectors);
+        }
+    }
+
+    private void HandleReceivedVectors(Vector2[] vectors)
+    {
+        mGameManager.InstantiateReceivedGrid(vectors);
+    }
 }
