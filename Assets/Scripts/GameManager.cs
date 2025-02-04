@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -36,15 +37,57 @@ public class GameManager : MonoBehaviour
     private Brush3d mBrush3dLocalServer;
     private Brush3d[] mBrushes = new Brush3d[2];
 
-    private void Awake()
+    private HashSet<Vector2Int> excludedPositions = new HashSet<Vector2Int>
     {
+        new Vector2Int(-3, 4),
+        new Vector2Int(-3, 3),
+        new Vector2Int(-2, 4),
 
-    }
+        new Vector2Int(1, 4),
+        new Vector2Int(2, 4),
+        new Vector2Int(2, 3),
 
-    private void Start()
-    {
+        new Vector2Int(-3, -3),
+        new Vector2Int(-3, -4),
+        new Vector2Int(-3, -5),
 
-    }
+        new Vector2Int(-2, -3),
+        new Vector2Int(-2, -4),
+        new Vector2Int(-2, -5),
+
+        new Vector2Int(1, 4),
+        new Vector2Int(2, 4),
+        new Vector2Int(2, 3),
+
+        new Vector2Int(1, -3),
+        new Vector2Int(1, -4),
+        new Vector2Int(1, -5),
+
+        new Vector2Int(2, -3),
+        new Vector2Int(2, -4),
+        new Vector2Int(2, -5),
+
+        new Vector2Int(-1, 4),
+        new Vector2Int(-2, 3),
+
+        new Vector2Int(-3, 2),
+        new Vector2Int(-3, 1),
+        new Vector2Int(-3, 0),
+        new Vector2Int(-3, -1),
+        new Vector2Int(-3, -2),
+
+        new Vector2Int(-1, -5),
+        new Vector2Int(0, -5),
+
+        new Vector2Int(2, -2),
+        new Vector2Int(2, -1),
+        new Vector2Int(2, 0),
+        new Vector2Int(2, 1),
+        new Vector2Int(2, 2),
+
+        new Vector2Int(1, 3),
+        new Vector2Int(0, 4)
+    };
 
     private void OnEnable()
     {
@@ -165,6 +208,11 @@ public class GameManager : MonoBehaviour
         {
             for (int y = -gridY; y < gridY; y++)
             {
+                Vector2Int currentPos = new Vector2Int(x, y);
+
+                if (excludedPositions.Contains(currentPos))
+                    continue;
+
                 gridPositions[index++] = new Vector2(x * cellSize, y * cellSize);
             }
         }
@@ -178,7 +226,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < objectsSpawned; i++)
         {
             Vector2 position = gridPositions[i];
-            GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, 0 ), Quaternion.identity, transform);
+            GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, -1.75f ), Quaternion.identity, transform);
             spawnPositions[i] = position;
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role == Roles.Leader);
