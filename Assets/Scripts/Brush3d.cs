@@ -2,12 +2,13 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.Events;
+using UnityEditor.PackageManager;
 
 public enum Roles
 {
     NotAssigned = 0,
     Leader = 1,
-    Follower = 2
+    Mapper = 2
 }
 
 
@@ -30,19 +31,29 @@ public class Brush3d : NetworkBehaviour
     public Roles Role { get { return mRole; } set { mRole = value; } }
 
 
+    //follower 
+    [SerializeField] private float moveSpeed;       // Speed of forward movement
+    [SerializeField] private float rotationSpeed;   // Speed of turning
+    private bool isLeaderTime = false;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        mRole = mNetworkObject.IsOwnedByServer ? Roles.Leader : Roles.Follower;
+        mRole = mNetworkObject.IsOwnedByServer ? Roles.Leader : Roles.Mapper;
         mGameManager = FindFirstObjectByType<GameManager>();
+
+        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
+        {
+            if (clientId == 1) isLeaderTime = true;
+        };
 
         InitializePlayer();
     }
 
     public void SwitchRole()
     {
-        mRole = mRole == Roles.Leader ? Roles.Follower : Roles.Leader ;
+        mRole = mRole == Roles.Leader ? Roles.Mapper : Roles.Leader ;
         InitializePlayer();
     }
 
@@ -60,8 +71,9 @@ public class Brush3d : NetworkBehaviour
 
     void Update()
     {
-        if (mRole == Roles.Leader)
+        if (mRole == Roles.Leader && isLeaderTime)
         {
+            /*
             // Get input from arrow keys or WASD keys
             float moveX = Input.GetAxis("Horizontal"); // A/D or Left/Right Arrow
             float moveY = Input.GetAxis("Vertical");   // W/S or Up/Down Arrow
@@ -70,7 +82,13 @@ public class Brush3d : NetworkBehaviour
             Vector3 movement = new Vector3(moveX, moveY, 0f);
 
             // Move the object in the X and Y directions
-            transform.Translate(movement * mSpeed * Time.deltaTime, Space.World);
+            transform.Translate(movement * mSpeed * Time.deltaTime, Space.World);*/
+            // Move forward constantly
+            transform.position += transform.right * moveSpeed * Time.deltaTime;
+
+            // Rotate left (A) or right (D)
+            float turn = Input.GetAxis("Horizontal"); // A = -1, D = 1
+            transform.Rotate(Vector3.back, turn * rotationSpeed * Time.deltaTime);
         }
     }
 

@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int objectsSpawned = 4;   // Number of objects to spawnd
     [SerializeField] private float cellSize = 1f;    // Size of each grid cell
 
+    //timer data
+    [SerializeField] private float inBetweenTimer = 25f;
+
     //Network
     [SerializeField] private NetworkManager mNetworkManager;
 
@@ -62,11 +65,9 @@ public class GameManager : MonoBehaviour
     {
         mBrush3dLocalServer = getTheServer();
         if (mBrush3dLocalServer.IsLocalPlayer) {
-            Debug.Log("Session started");
+            //Debug.Log("Session started");
             PopulateGrid();
-            mTimer.StartTimer(5f);
-            // switch role event subscribe here
-            // we switch 
+            mTimer.StartTimer(inBetweenTimer);
             mTimer.timerFinished.AddListener(onSecondRound);
 
             mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour
 
         mBrush3dLocalServer.CleanMapClientRpc();
         PopulateGrid();
-        mTimer.StartTimer(5f);
+        mTimer.StartTimer(inBetweenTimer);
         mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
 
     }
@@ -97,14 +98,14 @@ public class GameManager : MonoBehaviour
 
     private void onGameFinished()
     {
-        Debug.Log("shutdown");
+        //Debug.Log("shutdown");
         mNetworkManager.Shutdown();
     }
 
     private void gameEndReset(ulong id)
     {
         Destroy(mNetworkManager.gameObject);
-        Debug.Log("game reset");
+        //Debug.Log("game reset");
         SceneManager.LoadScene("endgame_scene");
     }
 
@@ -133,8 +134,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L) && mNetworkManager.IsServer)
         {
-            Debug.Log("IS SERVER");
-            mBrush3dLocalServer.SendVectorsServerRpc(GridPositions, 1);
+            //Debug.Log("IS SERVER");
+            //mBrush3dLocalServer.SendVectorsServerRpc(GridPositions, 1);
         }
     }
 

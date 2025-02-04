@@ -156,9 +156,9 @@ MonoBehaviour:
   SyncPositionX: 1
   SyncPositionY: 1
   SyncPositionZ: 0
-  SyncRotAngleX: 0
-  SyncRotAngleY: 0
-  SyncRotAngleZ: 0
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
@@ -188,6 +188,6 @@ MonoBehaviour:
   mSpeed: 5
   mMeshRenderer: {fileID: 4232762331282719414}
   mNetworkObject: {fileID: 8717740878321162744}
-  mPlayerInitialized:
-    m_PersistentCalls:
-      m_Calls: []
+  mGameManager: {fileID: 0}
+  moveSpeed: 1
+  rotationSpeed: 100
