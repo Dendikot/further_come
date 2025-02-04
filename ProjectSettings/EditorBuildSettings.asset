@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/mainMenu_scene.unity
     guid: 08e3f41ed2c96104fb4584a0b49902fc
   - enabled: 1
-    path: Assets/Scenes/ready_scene.unity
+    path: Assets/Scenes/custom_scene.unity
     guid: ee0018d57481a264b851f532906eaee6
   - enabled: 1
     path: Assets/Scenes/endgame_scene.unity
