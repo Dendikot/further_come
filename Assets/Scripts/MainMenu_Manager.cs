@@ -114,6 +114,7 @@ public class MainMenu_Manager : MonoBehaviour
             m_BackButton.gameObject.SetActive(false);
             m_PlayButton.gameObject.SetActive(true);
             m_EyesButton.gameObject.SetActive(false);
+            m_ReadyButton.gameObject.SetActive(false);
 
             SetButtonColor(m_BackButton, Color.white);
             Logo.color = Color.white;
@@ -195,9 +196,11 @@ public class MainMenu_Manager : MonoBehaviour
         //body custom
         if (transition && menuState == 3)
         {
+            CustomInfo.gameObject.SetActive(true);
+
             m_SwipeRightButton.gameObject.SetActive(true);
             m_SwipeLeftButton.gameObject.SetActive(true);
-            CustomInfo.gameObject.SetActive(true);
+            m_ReadyButton.gameObject.SetActive(true);
 
             if (customState == 0)
             {
