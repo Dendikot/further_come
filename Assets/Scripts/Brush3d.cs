@@ -36,6 +36,11 @@ public class Brush3d : NetworkBehaviour
     [SerializeField] private float rotationSpeed;   // Speed of turning
     private bool isLeaderTime = false;
 
+    private float minX = -3.3f; // Left border
+    private float maxX = 2.2f;  // Right border
+    private float minY = -5.2f; // Bottom border
+    private float maxY = 4.2f;  // Top border
+
     //collection
     private int mCollectedCells = 0;
 
@@ -92,8 +97,29 @@ public class Brush3d : NetworkBehaviour
             // Rotate left (A) or right (D)
             float turn = Input.GetAxis("Horizontal"); // A = -1, D = 1
             transform.Rotate(Vector3.back, turn * rotationSpeed * Time.deltaTime);
+
+            // Check if the character is outside the scene borders and wrap around
+            if (transform.position.x < minX) // Left border
+            {
+                transform.position = new Vector3(maxX, transform.position.y, transform.position.z); // Wrap to right
+            }
+            else if (transform.position.x > maxX) // Right border
+            {
+                transform.position = new Vector3(minX, transform.position.y, transform.position.z); // Wrap to left
+            }
+
+            if (transform.position.y < minY) // Bottom border
+            {
+                transform.position = new Vector3(transform.position.x, maxY, transform.position.z); // Wrap to top
+            }
+            else if (transform.position.y > maxY) // Top border
+            {
+                transform.position = new Vector3(transform.position.x, minY, transform.position.z); // Wrap to bottom
+            }
         }
     }
+
+
 
     [ClientRpc]
     public void SwitchRoleClientRpc()
