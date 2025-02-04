@@ -35,7 +35,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        //mNetworkManager.OnServerStarted += onSessionStarted;
+
+    }
+
+    private void Start()
+    {
+
+    }
+
+    private void OnEnable()
+    {
         mNetworkManager.OnClientConnectedCallback += onClientConnected;
         mNetworkManager.OnClientDisconnectCallback += gameEndReset;
     }
@@ -71,13 +80,6 @@ public class GameManager : MonoBehaviour
         mTimer.timerFinished.RemoveAllListeners();
         mTimer.timerFinished.AddListener(onGameFinished);
 
-        //regenerate the map
-        //sahre the map
-
-        //end scene goes again to the beggining
-        //insure secure reset
-
-       // CleanTheMap();
         mBrush3dLocalServer.CleanMapClientRpc();
         PopulateGrid();
         mTimer.StartTimer(5f);
@@ -95,11 +97,13 @@ public class GameManager : MonoBehaviour
 
     private void onGameFinished()
     {
+        Debug.Log("shutdown");
         mNetworkManager.Shutdown();
     }
 
     private void gameEndReset(ulong id)
     {
+        Destroy(mNetworkManager.gameObject);
         Debug.Log("game reset");
         SceneManager.LoadScene("endgame_scene");
     }
