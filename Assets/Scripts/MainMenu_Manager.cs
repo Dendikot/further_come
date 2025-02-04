@@ -14,6 +14,8 @@ public class MainMenu_Manager : MonoBehaviour
     Button m_SwipeLeftButton;
     [SerializeField]
     Button m_SwipeRightButton;
+    [SerializeField]
+    Button m_ReadyButton;
 
     public GameObject UIBody;
     public GameObject Sphere;
@@ -63,6 +65,7 @@ public class MainMenu_Manager : MonoBehaviour
         m_BackButton.onClick.AddListener(Back);
         m_SwipeLeftButton.onClick.AddListener(SwipeLeft);
         m_SwipeRightButton.onClick.AddListener(SwipeRight);
+        m_ReadyButton.onClick.AddListener(Ready);
 
         for (int i = 0; i < BodyCustom.Length; i++)
         {
@@ -310,6 +313,12 @@ public class MainMenu_Manager : MonoBehaviour
                 transition = true;
             }
         }
+    }
+
+    void Ready()
+    {
+        //TODO
+        //switching to play scene
     }
 
     void Back()
