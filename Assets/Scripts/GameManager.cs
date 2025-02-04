@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Brush3d obj in networkObjects)
         {
-            if (obj.Role == Roles.Leader) return obj;
+            if (obj.IsOwnedByServer) return obj;
         }
         return null;
     }
