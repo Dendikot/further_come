@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     private Vector2[] gridPositions;
 
-    public Vector2[] GridPositions {  get { return gridPositions; } }
+    public Vector2[] GridPositions {  get { return gridPositions; } set { gridPositions = value; } }
 
     private Brush3d mBrush3d;
 

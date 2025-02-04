@@ -62,6 +62,8 @@ public class Brush3d : NetworkBehaviour
 
     private void InitializePlayer()
     {
+        mGameManager = FindFirstObjectByType<GameManager>();
+
         if (mRole == Roles.Leader)
         {
             mMeshRenderer.enabled = true;
@@ -111,10 +113,8 @@ public class Brush3d : NetworkBehaviour
 
     private void HandleReceivedVectors(Vector2[] vectors)
     {
-        foreach (Vector3 v in vectors)
-        {
-            Debug.Log("Received Vector: " + v);
-        }
+        mGameManager.GridPositions = vectors;
+        mGameManager.PopulateGrid();
     }
     //public void SendData()
 }
