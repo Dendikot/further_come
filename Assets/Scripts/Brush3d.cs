@@ -99,4 +99,10 @@ public class Brush3d : NetworkBehaviour
     {
         mGameManager.InstantiateReceivedGrid(vectors);
     }
+
+    [ClientRpc]
+    public void CleanMapClientRpc()
+    {
+        mGameManager.CleanTheMap();
+    }
 }

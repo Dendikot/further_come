@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     {
         //mNetworkManager.OnServerStarted += onSessionStarted;
         mNetworkManager.OnClientConnectedCallback += onClientConnected;
-        mNetworkManager.OnServerStopped += gameEndReset;
+        mNetworkManager.OnClientDisconnectCallback += gameEndReset;
     }
 
     private void onClientConnected(ulong clientId)
@@ -71,15 +71,26 @@ public class GameManager : MonoBehaviour
         mTimer.timerFinished.RemoveAllListeners();
         mTimer.timerFinished.AddListener(onGameFinished);
 
-
-        // timer is broken somehow
-        //Debug.Log("hola");
-        //mTimer.StartTimer(5f);
-        mTimer.StartTimer(5f);
-
         //regenerate the map
-        //reset player positions
-        //this is where we activate second body.
+        //sahre the map
+
+        //end scene goes again to the beggining
+        //insure secure reset
+
+       // CleanTheMap();
+        mBrush3dLocalServer.CleanMapClientRpc();
+        PopulateGrid();
+        mTimer.StartTimer(5f);
+        mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
+
+    }
+
+    public void CleanTheMap()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     private void onGameFinished()
@@ -87,8 +98,9 @@ public class GameManager : MonoBehaviour
         mNetworkManager.Shutdown();
     }
 
-    private void gameEndReset(bool isHost)
+    private void gameEndReset(ulong id)
     {
+        Debug.Log("game reset");
         SceneManager.LoadScene("endgame_scene");
     }
 
