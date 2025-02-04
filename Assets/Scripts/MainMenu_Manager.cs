@@ -17,6 +17,8 @@ public class MainMenu_Manager : MonoBehaviour
     [SerializeField]
     Button m_ReadyButton;
 
+    public Audio_Manager audioManager;
+
     public GameObject UIBody;
     public GameObject Sphere;
     public GameObject Graphics;
@@ -51,6 +53,11 @@ public class MainMenu_Manager : MonoBehaviour
     private bool transition = false;
     private bool swipeRight = false; //to have the first move-in
     private bool swipeLeft = false;
+
+    void Awake()
+    {
+        audioManager.GetComponent<Audio_Manager>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -253,6 +260,8 @@ public class MainMenu_Manager : MonoBehaviour
     {
         if (!transition)
         {
+            audioManager.PlaySFX(audioManager.lerp);
+            audioManager.StopBackground(audioManager.sphereSource);
             menuState = 1;
             transition = true;
         }
@@ -267,6 +276,7 @@ public class MainMenu_Manager : MonoBehaviour
     {
         if (!transition)
         {
+            audioManager.PlaySFX(audioManager.lerp);
             menuState = 2;
             transition = true;
         }
@@ -277,6 +287,7 @@ public class MainMenu_Manager : MonoBehaviour
     {
         if (!transition)
         {
+            audioManager.PlaySFX(audioManager.lerp);
             swipeRight = true;
             menuState = 3;
             transition = true;
@@ -289,6 +300,7 @@ public class MainMenu_Manager : MonoBehaviour
         {
             if (customState > 0)
             {
+                audioManager.PlaySFX(audioManager.lerp);
                 customState -= 1;
                 m_SwipeRightButton.gameObject.SetActive(true);
 
@@ -305,6 +317,7 @@ public class MainMenu_Manager : MonoBehaviour
         {
             if (customState + 1 < BodyCustom.Length)
             {
+                audioManager.PlaySFX(audioManager.lerp);
                 customState += 1;
                 m_SwipeLeftButton.gameObject.SetActive(true);
 
@@ -329,6 +342,8 @@ public class MainMenu_Manager : MonoBehaviour
 
         if (!transition)
         {
+            audioManager.PlaySFX(audioManager.lerp);
+            audioManager.PlayBackground(audioManager.sphereSource);
             menuState = 0;
             transition = true;
         }
