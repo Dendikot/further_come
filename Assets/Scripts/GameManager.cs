@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     {
         //mNetworkManager.OnServerStarted += onSessionStarted;
         mNetworkManager.OnClientConnectedCallback += onClientConnected;
+        mNetworkManager.OnServerStopped += gameEndReset;
     }
 
     private void onClientConnected(ulong clientId)
@@ -65,6 +67,29 @@ public class GameManager : MonoBehaviour
     private void onSecondRound()
     {
         mBrush3dLocalServer.SwitchRoleClientRpc();
+
+        mTimer.timerFinished.RemoveAllListeners();
+        mTimer.timerFinished.AddListener(onGameFinished);
+
+
+        // timer is broken somehow
+        //Debug.Log("hola");
+        //mTimer.StartTimer(5f);
+        mTimer.StartTimer(5f);
+
+        //regenerate the map
+        //reset player positions
+        //this is where we activate second body.
+    }
+
+    private void onGameFinished()
+    {
+        mNetworkManager.Shutdown();
+    }
+
+    private void gameEndReset(bool isHost)
+    {
+        SceneManager.LoadScene("endgame_scene");
     }
 
     public void SwitchRoles()

@@ -47,14 +47,13 @@ public class Timer : MonoBehaviour
             if (timeRemaining > 0)
             {
                 timeRemaining -= Time.deltaTime;
-               // Debug.Log($"Time Remaining: {timeRemaining:F2}");
+                Debug.Log($"Time Remaining: {timeRemaining:F2}");
             }
             else
             {
                 Debug.Log("Time is up!");
-                timerFinished.Invoke();
-                timeRemaining = 0;
                 timerIsRunning = false;
+                timerFinished.Invoke();
             }
         }
     }
