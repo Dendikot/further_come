@@ -40,6 +40,12 @@ public class Timer : MonoBehaviour
         timerIsRunning = true;
     }
 
+    public void StopTimer()
+    {
+        timeRemaining = -0.1f;
+        Update();
+    }
+
     void Update()
     {
         if (timerIsRunning)

@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int objectsSpawned = 4;   // Number of objects to spawnd
     [SerializeField] private float cellSize = 1f;    // Size of each grid cell
 
+    public int ObjectsSpawned { get { return objectsSpawned; } }
+
     //timer data
     [SerializeField] private float inBetweenTimer = 25f;
 
@@ -117,7 +119,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void onSecondRound()
+    public void StopTimer()
+    {
+        mTimer.StopTimer();
+    }
+
+    public void onSecondRound()
     {
         mBrush3dLocalServer.SwitchRoleClientRpc();
 
@@ -202,7 +209,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Create a list of all available grid positions
-        gridPositions = new Vector2[gridCount];
+        gridPositions = new Vector2[gridCount - excludedPositions.Count];
         int index = 0;
         for (int x = -gridX; x < gridX; x++)
         {
@@ -216,6 +223,8 @@ public class GameManager : MonoBehaviour
                 gridPositions[index++] = new Vector2(x * cellSize, y * cellSize);
             }
         }
+
+
 
         // Shuffle the grid positions to ensure random placement
         ShuffleArray(gridPositions);

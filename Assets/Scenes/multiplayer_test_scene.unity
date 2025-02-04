@@ -504,7 +504,7 @@ MonoBehaviour:
   objectCount: 60
   objectsSpawned: 12
   cellSize: 1
-  inBetweenTimer: 5
+  inBetweenTimer: 155555
   mNetworkManager: {fileID: 1647951108}
   mTimer: {fileID: 1409020227}
 --- !u!1 &914435987
@@ -986,7 +986,7 @@ Transform:
   m_GameObject: {fileID: 1647951106}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.22, y: -4.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

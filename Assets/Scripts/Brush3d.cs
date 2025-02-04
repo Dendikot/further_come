@@ -36,6 +36,9 @@ public class Brush3d : NetworkBehaviour
     [SerializeField] private float rotationSpeed;   // Speed of turning
     private bool isLeaderTime = false;
 
+    //collection
+    private int mCollectedCells = 0;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -126,9 +129,17 @@ public class Brush3d : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Cell")
+        if (other.tag == "Cell" && mRole == Roles.Leader)
         {
             other.gameObject.SetActive(false);
+            mCollectedCells++;
+
+            if (mCollectedCells == mGameManager.ObjectsSpawned)
+            {
+                mCollectedCells = 0;
+
+                mGameManager.StopTimer();
+            }
         }
     }
 }
