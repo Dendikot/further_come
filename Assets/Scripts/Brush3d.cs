@@ -123,4 +123,12 @@ public class Brush3d : NetworkBehaviour
     {
         mGameManager.CleanTheMap();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Cell")
+        {
+            other.gameObject.SetActive(false);
+        }
+    }
 }
