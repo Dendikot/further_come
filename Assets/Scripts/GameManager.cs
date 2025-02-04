@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -34,8 +35,18 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        //mNetworkManager.OnServerStarted += onSessionStarted;
+
+    }
+
+    private void Start()
+    {
+
+    }
+
+    private void OnEnable()
+    {
         mNetworkManager.OnClientConnectedCallback += onClientConnected;
+        mNetworkManager.OnClientDisconnectCallback += gameEndReset;
     }
 
     private void onClientConnected(ulong clientId)
@@ -65,6 +76,36 @@ public class GameManager : MonoBehaviour
     private void onSecondRound()
     {
         mBrush3dLocalServer.SwitchRoleClientRpc();
+
+        mTimer.timerFinished.RemoveAllListeners();
+        mTimer.timerFinished.AddListener(onGameFinished);
+
+        mBrush3dLocalServer.CleanMapClientRpc();
+        PopulateGrid();
+        mTimer.StartTimer(5f);
+        mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
+
+    }
+
+    public void CleanTheMap()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void onGameFinished()
+    {
+        Debug.Log("shutdown");
+        mNetworkManager.Shutdown();
+    }
+
+    private void gameEndReset(ulong id)
+    {
+        Destroy(mNetworkManager.gameObject);
+        Debug.Log("game reset");
+        SceneManager.LoadScene("endgame_scene");
     }
 
     public void SwitchRoles()
