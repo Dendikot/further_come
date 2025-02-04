@@ -36,7 +36,7 @@ public class Brush3d : NetworkBehaviour
 
         mRole = mNetworkObject.IsOwnedByServer ? Roles.Leader : Roles.Follower;
 
-        Timer.Instance.timerFinished.AddListener(switchRole);
+        //Timer.Instance.timerFinished.AddListener(switchRole);
 
         InitializePlayer();
 
@@ -114,7 +114,6 @@ public class Brush3d : NetworkBehaviour
 
     private void HandleReceivedVectors(Vector2[] vectors)
     {
-        mGameManager.GridPositions = vectors;
-        mGameManager.PopulateGrid();
+        mGameManager.InstantiateReceivedGrid(vectors);
     }
 }
