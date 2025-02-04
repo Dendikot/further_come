@@ -39,6 +39,7 @@ public class Brush3d : NetworkBehaviour
         Timer.Instance.timerFinished.AddListener(switchRole);
 
         InitializePlayer();
+
     }
 
     private void switchRole()
@@ -116,5 +117,4 @@ public class Brush3d : NetworkBehaviour
         mGameManager.GridPositions = vectors;
         mGameManager.PopulateGrid();
     }
-    //public void SendData()
 }

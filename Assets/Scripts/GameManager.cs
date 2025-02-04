@@ -30,7 +30,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        mNetworkManager.OnServerStarted += onSessionStarted;
+        //mNetworkManager.OnServerStarted += onSessionStarted;
+        mNetworkManager.OnClientConnectedCallback += onClientConnected;
+    }
+
+    private void onClientConnected(ulong clientId)
+    {
+        if(clientId == 1)
+        {
+            onSessionStarted();
+        }
     }
 
     private void onSessionStarted()
