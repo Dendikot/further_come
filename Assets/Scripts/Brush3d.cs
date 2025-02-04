@@ -35,36 +35,19 @@ public class Brush3d : NetworkBehaviour
         base.OnNetworkSpawn();
 
         mRole = mNetworkObject.IsOwnedByServer ? Roles.Leader : Roles.Follower;
-
-        //Timer.Instance.timerFinished.AddListener(switchRole);
+        mGameManager = FindFirstObjectByType<GameManager>();
 
         InitializePlayer();
-
     }
 
-    private void switchRole()
+    public void SwitchRole()
     {
-        Debug.Log("Switch role");
         mRole = mRole == Roles.Leader ? Roles.Follower : Roles.Leader ;
         InitializePlayer();
     }
 
-    private void initializeMap()
-    {
-        if (mNetworkObject.IsOwnedByServer)
-        {
-            // create map here
-        }
-    }
-
-    // create a method that would send the map to the other player
-    // create map from received player
-    // 
-
     private void InitializePlayer()
     {
-        mGameManager = FindFirstObjectByType<GameManager>();
-
         if (mRole == Roles.Leader)
         {
             mMeshRenderer.enabled = true;
@@ -92,9 +75,9 @@ public class Brush3d : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SwitchRoleActivateClientRpc()
+    public void SwitchRoleClientRpc()
     {
-       switchRole();
+        mGameManager.SwitchRoles();
     }
 
     [ServerRpc]

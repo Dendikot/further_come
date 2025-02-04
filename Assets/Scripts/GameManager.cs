@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour
 
     private Vector2[] spawnPositions;
 
-    private Brush3d mBrush3d;
+    private Brush3d mBrush3dLocalServer;
+    private Brush3d[] mBrushes = new Brush3d[2];
 
     private void Awake()
     {
@@ -48,13 +49,29 @@ public class GameManager : MonoBehaviour
 
     private void onSessionStarted()
     {
-        mBrush3d = getTheServer();
-        if (mBrush3d.IsLocalPlayer) {
+        mBrush3dLocalServer = getTheServer();
+        if (mBrush3dLocalServer.IsLocalPlayer) {
             Debug.Log("Session started");
             PopulateGrid();
-            mTimer.StartTimer(2500f);
+            mTimer.StartTimer(5f);
+            // switch role event subscribe here
+            // we switch 
+            mTimer.timerFinished.AddListener(onSecondRound);
 
-            mBrush3d.SendVectorsServerRpc(spawnPositions, 1);
+            mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
+        }
+    }
+
+    private void onSecondRound()
+    {
+        mBrush3dLocalServer.SwitchRoleClientRpc();
+    }
+
+    public void SwitchRoles()
+    {
+        foreach (var brush in mBrushes)
+        {
+            brush.SwitchRole();
         }
     }
 
@@ -62,9 +79,9 @@ public class GameManager : MonoBehaviour
     // might cause problems in the future when the server is transferred to the remote
     private Brush3d getTheServer()
     {
-        Brush3d[] networkObjects = FindObjectsOfType<Brush3d>();
+        mBrushes = FindObjectsOfType<Brush3d>();
 
-        foreach (Brush3d obj in networkObjects)
+        foreach (Brush3d obj in mBrushes)
         {
             if (obj.IsOwnedByServer) return obj;
         }
@@ -76,7 +93,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L) && mNetworkManager.IsServer)
         {
             Debug.Log("IS SERVER");
-            mBrush3d.SendVectorsServerRpc(GridPositions, 1);
+            mBrush3dLocalServer.SendVectorsServerRpc(GridPositions, 1);
         }
     }
 
