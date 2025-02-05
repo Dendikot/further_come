@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < positions.Length; i++)
         {
             Vector2 position = positions[i];
-            GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, 1.75f), Quaternion.identity, transform);
+            GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, -1.75f), Quaternion.identity, transform);
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
         }
     }

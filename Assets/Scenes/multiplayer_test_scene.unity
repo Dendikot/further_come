@@ -1767,7 +1767,7 @@ MonoBehaviour:
   gridX: 3
   gridY: 5
   objectCount: 60
-  objectsSpawned: 2
+  objectsSpawned: 22
   cellSize: 1
   inBetweenTimer: 155555
   mNetworkManager: {fileID: 1647951108}
