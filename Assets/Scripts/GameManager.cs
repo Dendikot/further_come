@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     private Brush3d mBrush3dLocalServer;
     private Brush3d[] mBrushes = new Brush3d[2];
+    private Brush3d mCurrentBrush;
 
     private HashSet<Vector2Int> excludedPositions = new HashSet<Vector2Int>
     {
@@ -110,6 +111,7 @@ public class GameManager : MonoBehaviour
     private void onSessionStarted()
     {
         mBrush3dLocalServer = getTheServer();
+        mCurrentBrush = getTheOwner();
         if (mBrush3dLocalServer.IsLocalPlayer) {
             //Debug.Log("Session started");
             PopulateGrid();
@@ -180,6 +182,15 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    private Brush3d getTheOwner()
+    {
+        foreach (Brush3d obj in mBrushes)
+        {
+            if (obj.IsOwner) return obj;
+        }
+        return null;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L) && mNetworkManager.IsServer)
@@ -195,6 +206,10 @@ public class GameManager : MonoBehaviour
         {
             Vector2 position = positions[i];
             GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, -1.75f), Quaternion.identity, transform);
+            if(mCurrentBrush.Role == Roles.Leader)
+            {
+                cube.GetComponent<Renderer>().enabled = false;
+            }
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
         }
     }
@@ -237,6 +252,10 @@ public class GameManager : MonoBehaviour
             Vector2 position = gridPositions[i];
             GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, -1.75f ), Quaternion.identity, transform);
             spawnPositions[i] = position;
+            if(mCurrentBrush.Role == Roles.Leader)
+            {
+                cube.GetComponent<Renderer>().enabled = false;
+            }
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role == Roles.Leader);
         }
