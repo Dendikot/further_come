@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/NGO_Minimal_Setup/NGO_Setup.unity
     guid: 86f1e6a4147b43a4aa336f6809a3e436
   - enabled: 1
-    path: Assets/Scenes/multiplayer_test_scene.unity
+    path: Assets/Scenes/multiplayer_scene.unity
     guid: 1eff96990926d90449272b6efd07c5b4
   - enabled: 1
     path: Assets/Scenes/mainMenu_scene.unity

@@ -55,6 +55,9 @@ public class MainMenu_Manager : MonoBehaviour
     private bool swipeRight = false; //to have the first move-in
     private bool swipeLeft = false;
 
+    [SerializeField]
+    private CurrentBody mCurrentBody;
+
     void Awake()
     {
         audioManager.GetComponent<Audio_Manager>();
@@ -338,6 +341,10 @@ public class MainMenu_Manager : MonoBehaviour
 
     void Ready()
     {
+        mCurrentBody.currentBodyIndex = customState;
+        SceneManager.LoadScene("multiplayer_scene", LoadSceneMode.Single);
+
+        //
         //TODO
         //switching to play scene
     }

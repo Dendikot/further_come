@@ -16,6 +16,6 @@ public class EndGameScript : MonoBehaviour
     }
 
     public void GoBack() {
-        SceneManager.LoadScene("multiplayer_test_scene", LoadSceneMode.Single);
+        SceneManager.LoadScene("mainMenu_scene", LoadSceneMode.Single);
     }
 }

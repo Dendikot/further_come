@@ -47,6 +47,29 @@ public class Brush3d : NetworkBehaviour
     //signaling
     private MaterialController mMaterialController;
 
+    private NetworkVariable<int> currentBodyIndex = new NetworkVariable<int>(
+    0,
+    NetworkVariableReadPermission.Everyone,
+    NetworkVariableWritePermission.Server
+);
+
+
+    private void Start()
+    {
+        // Subscribe to changes in currentBodyIndex
+        currentBodyIndex.OnValueChanged += OnBodyIndexChanged;
+    }
+
+    private void OnDestroy()
+    {
+        currentBodyIndex.OnValueChanged -= OnBodyIndexChanged;
+    }
+
+    private void OnBodyIndexChanged(int oldValue, int newValue)
+    {
+        mGameManager.SetBody(newValue);
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -64,6 +87,11 @@ public class Brush3d : NetworkBehaviour
         if (IsLocalPlayer)
         {
             mMaterialController.mCurrentRole = mRole;
+
+            if (mRole == Roles.Leader)
+            {
+                currentBodyIndex.Value = mGameManager.mCurrentBody.currentBodyIndex; 
+            }
         }
 
         InitializePlayer();
@@ -80,6 +108,7 @@ public class Brush3d : NetworkBehaviour
         if (mRole == Roles.Leader)
         {
             mMeshRenderer.enabled = true;
+
         }
         else
         {
@@ -90,6 +119,8 @@ public class Brush3d : NetworkBehaviour
         {
             mMaterialController.mCurrentRole = mRole;
         }
+
+        mGameManager.SetBody(mGameManager.mCurrentBody.currentBodyIndex);
     }
 
     void Update()
@@ -195,5 +226,17 @@ public class Brush3d : NetworkBehaviour
     public void SendSignalServerRpc(float[] values)
     {
         mMaterialController.SetSignalValues(values, false);
+    }
+
+    [ClientRpc]
+    public void SendCurrentBodyClientRpc(int index)
+    {
+        mGameManager.SetBody(index);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SendCurrentBodyServerRpc(int index)
+    {
+        mGameManager.SetBody(index);
     }
 }

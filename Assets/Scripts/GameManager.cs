@@ -93,6 +93,12 @@ public class GameManager : MonoBehaviour
         new Vector2Int(0, 4)
     };
 
+    [SerializeField]
+    public CurrentBody mCurrentBody;
+
+    [SerializeField]
+    private GameObject[] mBodies;
+
     private void OnEnable()
     {
         mNetworkManager.OnClientConnectedCallback += onClientConnected;
@@ -159,7 +165,7 @@ public class GameManager : MonoBehaviour
     {
         Destroy(mNetworkManager.gameObject);
         //Debug.Log("game reset");
-        SceneManager.LoadScene("endgame_scene");
+        SceneManager.LoadScene("mainMenu_scene", LoadSceneMode.Single);
     }
 
     public void SwitchRoles()
@@ -167,6 +173,21 @@ public class GameManager : MonoBehaviour
         foreach (var brush in mBrushes)
         {
             brush.SwitchRole();
+        }
+    }
+
+    public void SetBody(int index)
+    {
+        for (int i = 0; i < mBodies.Length; i++)
+        {
+            if (i == index)
+            {
+                mBodies[i].SetActive(true);
+            }
+            else
+            {
+                mBodies[i].SetActive(false);
+            }
         }
     }
 
