@@ -44,12 +44,17 @@ public class Brush3d : NetworkBehaviour
     //collection
     private int mCollectedCells = 0;
 
+    //signaling
+    private MaterialController mMaterialController;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
         mRole = mNetworkObject.IsOwnedByServer ? Roles.Leader : Roles.Mapper;
         mGameManager = FindFirstObjectByType<GameManager>();
+
+        mMaterialController = FindFirstObjectByType<MaterialController>();
 
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
         {
@@ -167,5 +172,11 @@ public class Brush3d : NetworkBehaviour
                 mGameManager.StopTimer();
             }
         }
+    }
+
+    [ClientRpc]
+    public void SendSignalClientRpc(float[] values)
+    {
+        mMaterialController.SetSignalValues(values);
     }
 }

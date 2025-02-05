@@ -252,4 +252,9 @@ public class GameManager : MonoBehaviour
             array[randomIndex] = temp;
         }
     }
+
+    public void SendSignalValues(float[] values)
+    {
+        mBrush3dLocalServer.SendSignalClientRpc(values);
+    }
 }
