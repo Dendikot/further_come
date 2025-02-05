@@ -23,6 +23,7 @@ public class MainMenu_Manager : MonoBehaviour
     public GameObject Sphere;
     public GameObject Graphics;
     public GameObject Background;
+    public GameObject BackgroundCircle;
 
     public GameObject ReadyInfo;
     public GameObject CustomInfo;
@@ -105,6 +106,7 @@ public class MainMenu_Manager : MonoBehaviour
             //when transition started
             customState = 0;
             Background.gameObject.SetActive(false);
+            BackgroundCircle.gameObject.SetActive(false);
             UIBody.gameObject.SetActive(true);
             ReadyInfo.gameObject.SetActive(false);
             CustomInfo.SetActive(false);
@@ -131,6 +133,7 @@ public class MainMenu_Manager : MonoBehaviour
             Graphics.transform.position = Vector3.Lerp(Graphics.transform.position, GraphicsAim, speed * Time.deltaTime);
 
             Background.gameObject.SetActive(false);
+            BackgroundCircle.gameObject.SetActive(false);
 
             if (Vector3.Distance(UIBody.transform.position, UIBodyAim_1) < 0.1f && Vector3.Distance(Sphere.transform.position, SphereAim) < 0.1f && Vector3.Distance(Graphics.transform.position, GraphicsAim) < 0.1f)
             {
@@ -148,6 +151,7 @@ public class MainMenu_Manager : MonoBehaviour
             if (!transition)
             {
                 Background.gameObject.SetActive(false);
+                BackgroundCircle.gameObject.SetActive(false);
                 UIBody.gameObject.SetActive(true);
 
                 m_BackButton.gameObject.SetActive(true);
@@ -186,6 +190,7 @@ public class MainMenu_Manager : MonoBehaviour
                 }
 
                 Background.gameObject.SetActive(true);
+                BackgroundCircle.gameObject.SetActive(true);
                 UIBody.gameObject.SetActive(false);
                 //turn on a new body to customise
                 Debug.Log("Before CUSTOM");
@@ -341,6 +346,7 @@ public class MainMenu_Manager : MonoBehaviour
     {
         //BodyCustom[0].gameObject.SetActive(false);
         Background.gameObject.SetActive(false);
+        BackgroundCircle.gameObject.SetActive(false);
         Sphere.gameObject.SetActive(true);
 
         if (!transition)
