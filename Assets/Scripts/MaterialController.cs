@@ -13,6 +13,9 @@ public class MaterialController : MonoBehaviour
 
     private float mMultiplayerValue = 200f;
 
+    [SerializeField]
+    private GameManager mGameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,10 +43,8 @@ public class MaterialController : MonoBehaviour
             Debug.Log("Drag ended.");
             Debug.Log("Drag sides: Left = " + dragSides[0] + ", Right = " + dragSides[1] + ", Up = " + dragSides[2] + ", Down = " + dragSides[3]);
 
-            material[0].SetFloat("_Signal", dragSides[0] * mMultiplayerValue);
-            material[1].SetFloat("_Signal", dragSides[1] * mMultiplayerValue);
-            material[2].SetFloat("_Signal", dragSides[2] * mMultiplayerValue);
-            material[3].SetFloat("_Signal", dragSides[3] * mMultiplayerValue);
+            SetSignalValues(dragSides);
+            mGameManager.SendSignalValues(dragSides);
         }
 
         // Handle the drag while the mouse button is held down
@@ -67,4 +68,11 @@ public class MaterialController : MonoBehaviour
         }
     }
 
+    public void SetSignalValues(float[] valuesDrag)
+    {
+        material[0].SetFloat("_Signal", valuesDrag[0] * mMultiplayerValue);
+        material[1].SetFloat("_Signal", valuesDrag[1] * mMultiplayerValue);
+        material[2].SetFloat("_Signal", valuesDrag[2] * mMultiplayerValue);
+        material[3].SetFloat("_Signal", valuesDrag[3] * mMultiplayerValue);
+    }
 }
