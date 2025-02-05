@@ -103,6 +103,11 @@ public class GameManager : MonoBehaviour
     {
         mNetworkManager.OnClientConnectedCallback += onClientConnected;
         mNetworkManager.OnClientDisconnectCallback += gameEndReset;
+
+        //Place network code here
+
+        // for the server put start server here
+        // for the client put client here
     }
 
     private void onClientConnected(ulong clientId)
