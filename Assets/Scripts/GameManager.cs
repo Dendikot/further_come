@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using UnityEditor.TerrainTools;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -167,7 +168,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     // might cause problems in the future when the server is transferred to the remote
     private Brush3d getTheServer()
     {
@@ -255,6 +255,12 @@ public class GameManager : MonoBehaviour
 
     public void SendSignalValues(float[] values)
     {
-        mBrush3dLocalServer.SendSignalClientRpc(values);
+        if (NetworkManager.Singleton.IsServer)
+        {
+            mBrush3dLocalServer.SendSignalClientRpc(values);
+        } else 
+        {
+            mBrush3dLocalServer.SendSignalServerRpc(values);
+        }
     }
 }

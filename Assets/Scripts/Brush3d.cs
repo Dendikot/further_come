@@ -61,6 +61,11 @@ public class Brush3d : NetworkBehaviour
             if (clientId == 1) isLeaderTime = true;
         };
 
+        if (IsLocalPlayer)
+        {
+            mMaterialController.mCurrentRole = mRole;
+        }
+
         InitializePlayer();
     }
 
@@ -79,6 +84,11 @@ public class Brush3d : NetworkBehaviour
         else
         {
             mMeshRenderer.enabled = false;
+        }
+
+        if (IsLocalPlayer)
+        {
+            mMaterialController.mCurrentRole = mRole;
         }
     }
 
@@ -177,6 +187,12 @@ public class Brush3d : NetworkBehaviour
     [ClientRpc]
     public void SendSignalClientRpc(float[] values)
     {
-        mMaterialController.SetSignalValues(values);
+        mMaterialController.SetSignalValues(values, false);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SendSignalServerRpc(float[] values)
+    {
+        mMaterialController.SetSignalValues(values, false);
     }
 }

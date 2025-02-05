@@ -454,6 +454,7 @@ Transform:
   m_Children:
   - {fileID: 770818363}
   - {fileID: 1409020226}
+  - {fileID: 1855965677}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &484558605
@@ -889,7 +890,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &495612311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1699,9 +1700,9 @@ RectTransform:
   - {fileID: 499212995}
   m_Father: {fileID: 495612315}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -960}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &760077104
@@ -1766,7 +1767,7 @@ MonoBehaviour:
   gridX: 3
   gridY: 5
   objectCount: 60
-  objectsSpawned: 12
+  objectsSpawned: 2
   cellSize: 1
   inBetweenTimer: 155555
   mNetworkManager: {fileID: 1647951108}
@@ -3370,6 +3371,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800894945}
   m_CullTransparentMesh: 1
+--- !u!1 &1855965676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1855965677}
+  - component: {fileID: 1855965678}
+  m_Layer: 0
+  m_Name: MaterialController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1855965677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855965676}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 482674098}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1855965678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855965676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b015f8b07dda7b84fbba36229aa109b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rend:
+  - {fileID: 1792773854}
+  - {fileID: 1337605269}
+  - {fileID: 484558607}
+  - {fileID: 1377231281}
+  mGameManager: {fileID: 770818364}
+  mDuration: 1000
+  maxDragDistance: 1000
+  mCurrentRole: 0
 --- !u!4 &1919847901 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2546277019425636675, guid: bbc9485bb0b0dba4795f898257a3e9ce, type: 3}

@@ -17,7 +17,6 @@ public class MaterialController : MonoBehaviour
     [SerializeField]
     private GameManager mGameManager;
 
-    private float mCurrentValue = 0f;
     private float elapsedTime;
 
     [SerializeField]
@@ -25,6 +24,8 @@ public class MaterialController : MonoBehaviour
 
     [SerializeField]
     private float maxDragDistance = 200f;
+
+    public Roles mCurrentRole = Roles.NotAssigned;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,6 +41,20 @@ public class MaterialController : MonoBehaviour
 
     void Update()
     {
+
+        for (int i = 0; i < material.Length; i++)
+        {
+            float signal = material[i].GetFloat("_Signal");
+            if (signal > 0) // If dragSides value is greater than 0, apply lerp
+            {
+                elapsedTime += Time.deltaTime;
+                float newValue = Mathf.Lerp(signal, 0, elapsedTime / mDuration);
+                material[i].SetFloat("_Signal", newValue);
+            }
+        }
+
+        if (mCurrentRole != Roles.Mapper) return;
+
         // Detect if mouse button is pressed down and start dragging
         if (Input.GetMouseButtonDown(0))
         {
@@ -51,8 +66,8 @@ public class MaterialController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
-            Debug.Log("Drag ended.");
-            Debug.Log("Drag sides: Left = " + dragSides[0] + ", Right = " + dragSides[1] + ", Up = " + dragSides[2] + ", Down = " + dragSides[3]);
+            // Debug.Log("Drag ended.");
+            // Debug.Log("Drag sides: Left = " + dragSides[0] + ", Right = " + dragSides[1] + ", Up = " + dragSides[2] + ", Down = " + dragSides[3]);
 
             SetSignalValues(dragSides);
             //mGameManager.SendSignalValues(dragSides);
@@ -76,29 +91,18 @@ public class MaterialController : MonoBehaviour
             dragSides[2] = (dragDelta.y > 0) ? dragMagnitudeY : 0f; // Up
             dragSides[3] = (dragDelta.y < 0) ? dragMagnitudeY : 0f; // Down
         }
-
-
-
-        for (int i = 0; i < material.Length; i++)
-        {
-            float signal = material[i].GetFloat("_Signal");
-            if (signal > 0) // If dragSides value is greater than 0, apply lerp
-            {
-                elapsedTime += Time.deltaTime;
-                float newValue = Mathf.Lerp(signal, 0, elapsedTime / mDuration);
-                material[i].SetFloat("_Signal", newValue);
-            }
-        }
-
     }
 
-    public void SetSignalValues(float[] valuesDrag)
+    public void SetSignalValues(float[] valuesDrag, bool sendSignal = true)
     {
-        mCurrentValue = valuesDrag[0] * 200;
-
         material[0].SetFloat("_Signal", valuesDrag[0] * mMultiplayerValue);
         material[1].SetFloat("_Signal", valuesDrag[1] * mMultiplayerValue);
         material[2].SetFloat("_Signal", valuesDrag[2] * mMultiplayerValue);
         material[3].SetFloat("_Signal", valuesDrag[3] * mMultiplayerValue);
+
+        if (sendSignal)
+        {
+            mGameManager.SendSignalValues(valuesDrag);
+        }
     }
 }
