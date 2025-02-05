@@ -195,6 +195,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L) && mNetworkManager.IsServer)
         {
+            mTimer.StopTimer();
             //Debug.Log("IS SERVER");
             //mBrush3dLocalServer.SendVectorsServerRpc(GridPositions, 1);
         }
