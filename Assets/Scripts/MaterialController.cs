@@ -1,3 +1,4 @@
+using NUnit.Framework.Internal;
 using UnityEngine;
 
 public class MaterialController : MonoBehaviour
@@ -11,10 +12,19 @@ public class MaterialController : MonoBehaviour
     private bool isDragging = false; // Whether the user is dragging or not
     private float[] dragSides = new float[4]; // Array to hold values for left, right, up, down
 
-    private float mMultiplayerValue = 200f;
+    private float mMultiplayerValue = 100f;
 
     [SerializeField]
     private GameManager mGameManager;
+
+    private float mCurrentValue = 0f;
+    private float elapsedTime;
+
+    [SerializeField]
+    private float mDuration = 1f;
+
+    [SerializeField]
+    private float maxDragDistance = 200f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,6 +33,7 @@ public class MaterialController : MonoBehaviour
         {
             material[i] = rend[i].material;
         }
+
     }
 
 
@@ -44,7 +55,7 @@ public class MaterialController : MonoBehaviour
             Debug.Log("Drag sides: Left = " + dragSides[0] + ", Right = " + dragSides[1] + ", Up = " + dragSides[2] + ", Down = " + dragSides[3]);
 
             SetSignalValues(dragSides);
-            mGameManager.SendSignalValues(dragSides);
+            //mGameManager.SendSignalValues(dragSides);
         }
 
         // Handle the drag while the mouse button is held down
@@ -55,21 +66,36 @@ public class MaterialController : MonoBehaviour
             // Calculate the difference between the start position and current position
             Vector3 dragDelta = currentPosition - startPosition;
 
-            // Normalize the drag direction to get relative movement (scaled to a unit vector)
-            Vector3 dragDirection = dragDelta.normalized;
+            // Normalize by maxDragDistance to scale the values between 0 and 1
+            float dragMagnitudeX = Mathf.Clamp01(Mathf.Abs(dragDelta.x) / maxDragDistance);
+            float dragMagnitudeY = Mathf.Clamp01(Mathf.Abs(dragDelta.y) / maxDragDistance);
 
-            // Calculate magnitudes for each side (left, right, up, down)
-            dragSides[0] = Mathf.Clamp01(-dragDirection.x);  // Left (0 to 1)
-            dragSides[1] = Mathf.Clamp01(dragDirection.x);   // Right (0 to 1)
-            dragSides[2] = Mathf.Clamp01(dragDirection.y);   // Up (0 to 1)
-            dragSides[3] = Mathf.Clamp01(-dragDirection.y);  // Down (0 to 1)
-
-            // Log the output array of four values
+            // Calculate left, right, up, and down magnitudes based on direction
+            dragSides[0] = (dragDelta.x < 0) ? dragMagnitudeX : 0f; // Left
+            dragSides[1] = (dragDelta.x > 0) ? dragMagnitudeX : 0f; // Right
+            dragSides[2] = (dragDelta.y > 0) ? dragMagnitudeY : 0f; // Up
+            dragSides[3] = (dragDelta.y < 0) ? dragMagnitudeY : 0f; // Down
         }
+
+
+
+        for (int i = 0; i < material.Length; i++)
+        {
+            float signal = material[i].GetFloat("_Signal");
+            if (signal > 0) // If dragSides value is greater than 0, apply lerp
+            {
+                elapsedTime += Time.deltaTime;
+                float newValue = Mathf.Lerp(signal, 0, elapsedTime / mDuration);
+                material[i].SetFloat("_Signal", newValue);
+            }
+        }
+
     }
 
     public void SetSignalValues(float[] valuesDrag)
     {
+        mCurrentValue = valuesDrag[0] * 200;
+
         material[0].SetFloat("_Signal", valuesDrag[0] * mMultiplayerValue);
         material[1].SetFloat("_Signal", valuesDrag[1] * mMultiplayerValue);
         material[2].SetFloat("_Signal", valuesDrag[2] * mMultiplayerValue);

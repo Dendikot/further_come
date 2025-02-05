@@ -153,6 +153,9 @@ MonoBehaviour:
   - {fileID: 1291349280}
   - {fileID: 1238623170}
   - {fileID: 1533867510}
+  mGameManager: {fileID: 0}
+  mDuration: 2000
+  maxDragDistance: 1000
 --- !u!4 &252480322
 Transform:
   m_ObjectHideFlags: 0
