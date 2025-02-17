@@ -13,8 +13,8 @@ public class UI_Manager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        m_StartHostButton.onClick.AddListener(StartHost);
-        m_StartClientButton.onClick.AddListener(StartClient);
+        //m_StartHostButton.onClick.AddListener(StartHost);
+        //m_StartClientButton.onClick.AddListener(StartClient);
     }
 
     void StartClient()
