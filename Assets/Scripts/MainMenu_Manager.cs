@@ -420,7 +420,7 @@ public class MainMenu_Manager : MonoBehaviour
         }
         //sohuld be used at the latest
         //mCurrentBody.currentBodyIndex = customState;
-        //SceneManager.LoadScene("multiplayer_scene", LoadSceneMode.Single);
+        
 
         //
         //TODO
@@ -429,7 +429,7 @@ public class MainMenu_Manager : MonoBehaviour
 
     void InitiateSession()
     {
-
+        SceneManager.LoadScene("multiplayer_scene", LoadSceneMode.Single);
     }
 
     void JoinSession()
