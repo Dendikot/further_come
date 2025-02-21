@@ -16,6 +16,10 @@ public class MainMenu_Manager : MonoBehaviour
     Button m_SwipeRightButton;
     [SerializeField]
     Button m_ReadyButton;
+    [SerializeField]
+    Button m_JoinButton;
+    [SerializeField]
+    Button m_InitiateButton;
 
     public Audio_Manager audioManager;
 
@@ -27,8 +31,10 @@ public class MainMenu_Manager : MonoBehaviour
 
     public GameObject ReadyInfo;
     public GameObject CustomInfo;
+    public GameObject StartInfo;
 
     public GameObject[] Particles;
+    public GameObject[] ParticlesStart;
     public GameObject[] BodyCustom;
 
     public Image Logo;
@@ -38,11 +44,15 @@ public class MainMenu_Manager : MonoBehaviour
     public Vector3 UIBodyAim_1;
     public Vector3 UIBodyAim_2;
     public Vector3 SphereAim;
+    //public Vector3 BackgroundCircleScaleAim;
+    public float BackgroundCircleYScaleAim;
     public Vector3 GraphicsAim;
     public Vector3[] BodyCustomAim;
 
     private Vector3 UIBodyInit;
     private Vector3 SphereInit;
+    //private Vector3 BackgroundCircleScaleInit;
+    private float BackgroundCircleYScaleInit;
     private Vector3 GraphicsInit;
     private Vector3 BodyCustomInit;
 
@@ -68,6 +78,8 @@ public class MainMenu_Manager : MonoBehaviour
     {
         UIBodyInit = UIBody.transform.position;
         SphereInit = Sphere.transform.position;
+        BackgroundCircleYScaleInit = BackgroundCircle.transform.localScale.y;
+        Debug.Log("YScaleInit = " + BackgroundCircleYScaleInit);
         GraphicsInit = Graphics.transform.position;
         BodyCustomInit = BodyCustom[0].transform.position;
 
@@ -90,13 +102,22 @@ public class MainMenu_Manager : MonoBehaviour
         //first screen / back button
         if (transition && menuState == 0)
         {
+            foreach (GameObject g in ParticlesStart)
+            {
+                g.SetActive(false);
+            }
+
             UIBody.transform.position = Vector3.Lerp(UIBody.transform.position, UIBodyInit, speed * Time.deltaTime);
             Sphere.transform.position = Vector3.Lerp(Sphere.transform.position, SphereInit, speed * Time.deltaTime);
             Graphics.transform.position = Vector3.Lerp(Graphics.transform.position, GraphicsInit, speed * Time.deltaTime);
-            
+
+            float newY = Mathf.Lerp(BackgroundCircle.transform.localScale.y, BackgroundCircleYScaleInit, speed * Time.deltaTime);
+            BackgroundCircle.transform.localScale = new Vector3(BackgroundCircle.transform.localScale.x, newY, BackgroundCircle.transform.localScale.z);
+
             //reset bodies and their aims
             for (int i = 0; i < BodyCustom.Length; i++)
             {
+                BodyCustom[i].gameObject.SetActive(false);
                 BodyCustom[i].transform.position = Vector3.Lerp(BodyCustom[i].transform.position, BodyCustomInit - i * swipe, speed * Time.deltaTime);
                 BodyCustomAim[i] = BodyCustomInit - i * swipe;
             }
@@ -104,7 +125,6 @@ public class MainMenu_Manager : MonoBehaviour
             if (Vector3.Distance(UIBody.transform.position, UIBodyInit) < 0.1f && Vector3.Distance(Sphere.transform.position, SphereInit) < 0.1f && Vector3.Distance(Graphics.transform.position, GraphicsInit) < 0.1f)
             {
                 transition = false;
-                
             }
             //when transition started
             customState = 0;
@@ -113,6 +133,7 @@ public class MainMenu_Manager : MonoBehaviour
             UIBody.gameObject.SetActive(true);
             ReadyInfo.gameObject.SetActive(false);
             CustomInfo.SetActive(false);
+            StartInfo.gameObject.SetActive(false);
 
             m_SwipeRightButton.gameObject.SetActive(false);
             m_SwipeLeftButton.gameObject.SetActive(false);
@@ -120,6 +141,8 @@ public class MainMenu_Manager : MonoBehaviour
             m_PlayButton.gameObject.SetActive(true);
             m_EyesButton.gameObject.SetActive(false);
             m_ReadyButton.gameObject.SetActive(false);
+            m_InitiateButton.gameObject.SetActive(false);
+            m_JoinButton.gameObject.SetActive(false);
 
             SetButtonColor(m_BackButton, Color.white);
             Logo.color = Color.white;
@@ -165,6 +188,12 @@ public class MainMenu_Manager : MonoBehaviour
         //eyes button
         if (transition && menuState == 2)
         {
+            //turn bodies on
+            for (int i = 0; i < BodyCustom.Length; i++)
+            {
+                BodyCustom[i].gameObject.SetActive(true);
+            }
+            //UIBody transition
             UIBody.transform.position = Vector3.Lerp(UIBody.transform.position, UIBodyAim_2, speed * Time.deltaTime);
 
             if (Vector3.Distance(UIBody.transform.position, UIBodyAim_2) < 0.1f && Vector3.Distance(Sphere.transform.position, SphereAim) < 0.1f && Vector3.Distance(Graphics.transform.position, GraphicsAim) < 0.1f)
@@ -264,7 +293,49 @@ public class MainMenu_Manager : MonoBehaviour
                     m_BackButton.enabled = true;
                 }
             }
-        }   
+        }
+        //initiate/join session
+        if (transition && menuState == 4)
+        {
+            //BacgroundCircel "eye" closing transition
+            float newY = Mathf.Lerp(BackgroundCircle.transform.localScale.y, BackgroundCircleYScaleAim, speed * Time.deltaTime);
+            BackgroundCircle.transform.localScale = new Vector3(BackgroundCircle.transform.localScale.x, newY, BackgroundCircle.transform.localScale.z);
+
+            if ((BackgroundCircle.transform.localScale.y - BackgroundCircleYScaleAim) < 0.1)
+            {
+                transition = false;
+            }
+            //when transition started
+            CustomInfo.gameObject.SetActive(false);
+            
+            m_SwipeRightButton.gameObject.SetActive(false);
+            m_SwipeLeftButton.gameObject.SetActive(false);
+            m_ReadyButton.gameObject.SetActive(false);
+
+            //turn off bodies
+            for (int i = 0; i < BodyCustom.Length; i++)
+            {
+                BodyCustom[i].gameObject.SetActive(false);
+            }
+
+            //when transition is done
+            if (!transition)
+            {
+                foreach (GameObject g in ParticlesStart)
+                {
+                    g.SetActive(true);
+                }
+
+                m_SwipeRightButton.gameObject.SetActive(false);
+                m_SwipeLeftButton.gameObject.SetActive(false);
+
+                StartInfo.gameObject.SetActive(true);
+                BackgroundCircle.gameObject.SetActive(false);
+
+                m_InitiateButton.gameObject.SetActive(true);
+                m_JoinButton.gameObject.SetActive(true);
+            }
+        }
     }
 
     void Play()
@@ -341,12 +412,29 @@ public class MainMenu_Manager : MonoBehaviour
 
     void Ready()
     {
-        mCurrentBody.currentBodyIndex = customState;
-        SceneManager.LoadScene("multiplayer_scene", LoadSceneMode.Single);
+        if (!transition)
+        {
+            audioManager.PlaySFX(audioManager.lerp);
+            menuState = 4;
+            transition = true;
+        }
+        //sohuld be used at the latest
+        //mCurrentBody.currentBodyIndex = customState;
+        //SceneManager.LoadScene("multiplayer_scene", LoadSceneMode.Single);
 
         //
         //TODO
         //switching to play scene
+    }
+
+    void InitiateSession()
+    {
+
+    }
+
+    void JoinSession()
+    {
+
     }
 
     void Back()
