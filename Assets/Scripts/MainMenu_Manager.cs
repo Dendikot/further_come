@@ -321,6 +321,9 @@ public class MainMenu_Manager : MonoBehaviour
             //when transition is done
             if (!transition)
             {
+                //UIBody.gameObject.SetActive(true);
+                SceneManager.LoadScene("multiplayer_scene", LoadSceneMode.Single);
+                /*
                 foreach (GameObject g in ParticlesStart)
                 {
                     g.SetActive(true);
@@ -334,6 +337,7 @@ public class MainMenu_Manager : MonoBehaviour
 
                 m_InitiateButton.gameObject.SetActive(true);
                 m_JoinButton.gameObject.SetActive(true);
+                */
             }
         }
     }
@@ -429,7 +433,7 @@ public class MainMenu_Manager : MonoBehaviour
 
     void InitiateSession()
     {
-        SceneManager.LoadScene("multiplayer_scene", LoadSceneMode.Single);
+        
     }
 
     void JoinSession()

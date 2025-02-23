@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +13,8 @@ public class Timer : MonoBehaviour
     private UnityEvent timerStarted = new UnityEvent();
 
     public UnityEvent timerFinished = new UnityEvent();
+
+    [SerializeField] TextMeshProUGUI timerUI;
 
     public static Timer Instance { get; private set; }
 
@@ -54,6 +57,7 @@ public class Timer : MonoBehaviour
             {
                 timeRemaining -= Time.deltaTime;
                 //Debug.Log($"Time Remaining: {timeRemaining:F2}");
+                timerUI.text = "" + timeRemaining;
             }
             else
             {

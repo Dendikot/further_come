@@ -2,36 +2,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 public class UI_Manager : MonoBehaviour
 {
     [SerializeField]
-    Button m_StartHostButton;
-    [SerializeField]
-    Button m_StartClientButton;
+    Button m_BackButton;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //m_StartHostButton.onClick.AddListener(StartHost);
-        //m_StartClientButton.onClick.AddListener(StartClient);
+        m_BackButton.onClick.AddListener(Back);
     }
 
-    void StartClient()
+    void Back()
     {
-        NetworkManager.Singleton.StartClient();
-        DeactivateButtons();
-    }
-
-    void StartHost()
-    {
-        NetworkManager.Singleton.StartHost();
-        DeactivateButtons();
-    }
-
-    void DeactivateButtons()
-    {
-            m_StartHostButton.gameObject.SetActive(false);
-            m_StartClientButton.gameObject.SetActive(false);
+        SceneManager.LoadScene("mainMenu_scene", LoadSceneMode.Single);
     }
 }

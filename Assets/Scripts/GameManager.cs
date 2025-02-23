@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEditor.TerrainTools;
+using System.Collections;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -22,6 +23,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float cellSize = 1f;    // Size of each grid cell
 
     public int ObjectsSpawned { get { return objectsSpawned; } }
+
+    //UI
+    [SerializeField] private float speed;
+    public GameObject Background;
+    public GameObject Graphics;
+    public GameObject StartInfo;
+    public GameObject StartButtons;
+    public Vector3 BackgroundAim;
 
     //timer data
     [SerializeField] private float inBetweenTimer = 25f;
@@ -121,6 +130,9 @@ public class GameManager : MonoBehaviour
 
     private void onSessionStarted()
     {
+        //turn off UI
+        UITransition();
+
         mBrush3dLocalServer = getTheServer();
         mCurrentBrush = getTheOwner();
         if (mBrush3dLocalServer.IsLocalPlayer) {
@@ -131,6 +143,24 @@ public class GameManager : MonoBehaviour
 
             mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
         }
+    }
+    
+    private IEnumerator BackgroundMove()
+    {
+        while ((Vector3.Distance(Background.transform.position, BackgroundAim) < 0.1f))
+        {
+            Background.transform.position = Vector3.Lerp(Background.transform.position, BackgroundAim, speed * Time.deltaTime);
+            yield return null;
+        }
+        Background.transform.position = BackgroundAim;
+    }
+
+    private void UITransition()
+    {
+        StartInfo.SetActive(false);
+        StartButtons.SetActive(false);
+        Graphics.SetActive(false);
+        StartCoroutine(BackgroundMove());
     }
 
     public void StopTimer()

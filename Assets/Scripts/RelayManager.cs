@@ -30,7 +30,7 @@ public class RelayManager : MonoBehaviour
     {
         Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2);
         string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-        codeText.text= "Code: " + joinCode;
+        codeText.text= "THE CODE:\n" + joinCode;
 
         var relayServerData = AllocationUtils.ToRelayServerData(allocation, "dtls");
 
