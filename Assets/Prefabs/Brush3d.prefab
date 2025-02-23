@@ -192,7 +192,7 @@ MonoBehaviour:
   mMeshRenderer: {fileID: 4232762331282719414}
   mNetworkObject: {fileID: 8717740878321162744}
   mGameManager: {fileID: 0}
-  moveSpeed: 1
+  moveSpeed: 0.5
   rotationSpeed: 100
 --- !u!54 &720107992173457785
 Rigidbody:

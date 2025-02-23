@@ -1568,7 +1568,6 @@ RectTransform:
   - {fileID: 2040184009}
   - {fileID: 760077103}
   - {fileID: 145580155}
-  - {fileID: 2059918413}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1775,9 +1774,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'ENTER
-
-    THE CODE'
+  m_text: ENTER THE CODE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 38b14e0659d877047b6f08450683eed5, type: 2}
   m_sharedMaterial: {fileID: 1044255678101660602, guid: 38b14e0659d877047b6f08450683eed5, type: 2}
@@ -2317,6 +2314,7 @@ RectTransform:
   - {fileID: 2058513299}
   - {fileID: 913531219}
   - {fileID: 1332083943}
+  - {fileID: 2059918413}
   m_Father: {fileID: 145580155}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2683,7 +2681,7 @@ MonoBehaviour:
   gridX: 3
   gridY: 5
   objectCount: 60
-  objectsSpawned: 2
+  objectsSpawned: 4
   cellSize: 1
   speed: 5
   Background: {fileID: 719325328}
@@ -2691,7 +2689,7 @@ MonoBehaviour:
   StartInfo: {fileID: 679488014}
   StartButtons: {fileID: 760077102}
   BackgroundAim: {x: -0.5, y: -0.29, z: -6.34}
-  inBetweenTimer: 2555
+  inBetweenTimer: 60
   mNetworkManager: {fileID: 1647951108}
   mTimer: {fileID: 1409020227}
   mCurrentBody: {fileID: 11400000, guid: f40b3de3a9ad4f84ab1bb5f7cd9f2a66, type: 2}
@@ -3792,11 +3790,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a9c319e7253939943b15e98cc8a0fb0b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.34800005
+      value: 0.34800008
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a9c319e7253939943b15e98cc8a0fb0b, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.1600004
+      value: 1.1600007
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a9c319e7253939943b15e98cc8a0fb0b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3957,7 +3955,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -228.9}
-  m_SizeDelta: {x: 190, y: 80}
+  m_SizeDelta: {x: 300, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1332083944
 MonoBehaviour:
@@ -4073,7 +4071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.19607843}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4501,8 +4499,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 749}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 852}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1412920932
 MonoBehaviour:
@@ -4558,8 +4556,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6625,14 +6623,14 @@ RectTransform:
   m_GameObject: {fileID: 2059918412}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.16, y: 1.16, z: 1.16}
+  m_LocalScale: {x: 1.2806077, y: 1.2806077, z: 1.2806077}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 495612315}
+  m_Father: {fileID: 679488015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 730}
+  m_AnchoredPosition: {x: 0, y: 805.8997}
   m_SizeDelta: {x: 335, y: 139}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2059918414
@@ -7049,8 +7047,8 @@ SceneRoots:
   - {fileID: 2030902802}
   - {fileID: 2072076494}
   - {fileID: 711817605}
-  - {fileID: 1203270805}
   - {fileID: 1306330195}
+  - {fileID: 1203270805}
   - {fileID: 495612315}
   - {fileID: 482674098}
   - {fileID: 1647951109}
