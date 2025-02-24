@@ -147,12 +147,15 @@ public class GameManager : MonoBehaviour
     
     private IEnumerator BackgroundMove()
     {
-        while ((Vector3.Distance(Background.transform.position, BackgroundAim) < 0.1f))
+        //TO FIX
+        //works but is not visible
+        while ((Vector3.Distance(Background.transform.position, BackgroundAim) > 0.1f))
         {
+            Debug.Log("Background courutine. Current pos - " + Background.transform.position);
             Background.transform.position = Vector3.Lerp(Background.transform.position, BackgroundAim, speed * Time.deltaTime);
             yield return null;
         }
-        Background.transform.position = BackgroundAim;
+        //Background.transform.position = BackgroundAim;
     }
 
     private void UITransition()
@@ -200,7 +203,7 @@ public class GameManager : MonoBehaviour
     {
         Destroy(mNetworkManager.gameObject);
         //Debug.Log("game reset");
-        SceneManager.LoadScene("mainMenu_scene", LoadSceneMode.Single);
+        SceneManager.LoadScene("endgame_scene", LoadSceneMode.Single);
     }
 
     public void SwitchRoles()

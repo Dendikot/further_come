@@ -76,6 +76,9 @@ public class MaterialController : MonoBehaviour
         // Handle the drag while the mouse button is held down
         if (isDragging)
         {
+            //Audio trigger
+            Audio_Manager.instance.PlayRandomSignal();
+
             Vector3 currentPosition = Input.mousePosition;  // Get current mouse position during drag
 
             // Calculate the difference between the start position and current position

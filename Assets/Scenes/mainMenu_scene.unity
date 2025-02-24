@@ -3373,6 +3373,13 @@ MonoBehaviour:
   sphere: {fileID: 0}
   particles: {fileID: 0}
   lerp: {fileID: 8300000, guid: 44366ba0eeb5a08478553fa6cefc0832, type: 3}
+  signals:
+  - {fileID: 8300000, guid: 12c9430024e8566439971e3bd1972deb, type: 3}
+  - {fileID: 8300000, guid: 1a84ce8945389354191b92e8071c3bba, type: 3}
+  - {fileID: 8300000, guid: c25cc8bde6f7aef40ae9e0e4e95e1e8d, type: 3}
+  - {fileID: 8300000, guid: f246eeb536447e24ea5f074804996210, type: 3}
+  - {fileID: 8300000, guid: c7d8222f7403c96428fefc3a5e977163, type: 3}
+  minInterval: 0.25
 --- !u!4 &1153367847
 Transform:
   m_ObjectHideFlags: 0
