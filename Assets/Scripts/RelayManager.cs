@@ -29,7 +29,7 @@ public class RelayManager : MonoBehaviour
         if (!AuthenticationService.Instance.IsSignedIn)
         {            await AuthenticationService.Instance.SignInAnonymouslyAsync();
             hostButton.onClick.AddListener(()=> _ = CreateRelayAsync());
-            joinButton.onClick.AddListener(() => JoinRelay(joinInput.text));
+            joinButton.onClick.AddListener(() => _ = JoinRelayAsync(joinInput.text));
         }
 
 
@@ -90,12 +90,63 @@ public class RelayManager : MonoBehaviour
         }
     }
 
-    async void JoinRelay(string joinCode)
-    {
-        var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-        var relayServerData = AllocationUtils.ToRelayServerData(joinAllocation, "dtls");
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+    private static SemaphoreSlim _joinLock = new SemaphoreSlim(1, 1);
+    private CancellationTokenSource _joinCancellationTokenSource;
 
-        NetworkManager.Singleton.StartClient();
+    async Task JoinRelayAsync(string joinCode)
+    {
+        if (string.IsNullOrEmpty(joinCode))
+        {
+            Debug.LogError("Join code is null or empty. Cannot join relay.");
+            return;
+        }
+
+        if (!_joinLock.Wait(0))
+        {
+            Debug.LogWarning("JoinRelayAsync is already running. Cancelling previous attempt and restarting...");
+
+            // Cancel the previous join attempt
+            _joinCancellationTokenSource?.Cancel();
+            _joinCancellationTokenSource = new CancellationTokenSource();
+        }
+        else
+        {
+            _joinCancellationTokenSource = new CancellationTokenSource();
+        }
+
+        if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
+        {
+            Debug.LogWarning("Client is already running. Cannot join again.");
+            _joinLock.Release();
+            return;
+        }
+
+        try
+        {
+            Debug.Log($"Attempting to join relay with code: {joinCode}");
+
+            var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+
+            // If a new join request was made, cancel this one
+            if (_joinCancellationTokenSource.Token.IsCancellationRequested)
+            {
+                Debug.LogWarning("Join operation was canceled before completion.");
+                return;
+            }
+
+            var relayServerData = AllocationUtils.ToRelayServerData(joinAllocation, "dtls");
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
+            NetworkManager.Singleton.StartClient();
+            Debug.Log("Successfully joined relay.");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to join relay: {ex.Message}");
+        }
+        finally
+        {
+            _joinLock.Release();
+        }
     }
 }
