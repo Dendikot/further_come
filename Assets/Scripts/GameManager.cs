@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
 
     //Timer
     [SerializeField] private Timer mTimer;
+    public Timer Timer;
 
     private Vector2[] gridPositions;
     public Vector2[] GridPositions {  get { return gridPositions; } set { gridPositions = value; } }
@@ -268,7 +269,8 @@ public class GameManager : MonoBehaviour
             GameObject cube = Instantiate(objectPrefab, new Vector3(position.x, position.y, -1.75f), Quaternion.identity, transform);
             if(mCurrentBrush.Role == Roles.Leader)
             {
-                cube.GetComponent<Renderer>().enabled = false;
+                //cube.GetComponent<Renderer>().enabled = false;
+                cube.transform.GetChild(0).gameObject.SetActive(false);
             }
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
         }
@@ -314,7 +316,8 @@ public class GameManager : MonoBehaviour
             spawnPositions[i] = position;
             if(mCurrentBrush.Role == Roles.Leader)
             {
-                cube.GetComponent<Renderer>().enabled = false;
+                cube.transform.GetChild(0).gameObject.SetActive(false);
+                //cube.GetComponent<Renderer>().enabled = false;
             }
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role != Roles.Leader);
             //cube.GetComponent<MeshRenderer>().enabled = (mBrush3d.Role == Roles.Leader);
