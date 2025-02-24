@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEditor.TerrainTools;
 using System.Collections;
+using Unity.Netcode.Transports.UTP;
 
 //This is where all game logic will reside
 //Create one round of tasks
@@ -196,7 +197,20 @@ public class GameManager : MonoBehaviour
 
     private void onGameFinished()
     {
-        //Debug.Log("shutdown");
+        if(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
+    {
+            Debug.Log("Shutting down existing network session...");
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        // Reset UnityTransport
+        var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        if (transport != null)
+        {
+            transport.SetRelayServerData(default);
+        }
+
+        Debug.Log("NetworkManager reset complete.");
         mNetworkManager.Shutdown();
     }
 

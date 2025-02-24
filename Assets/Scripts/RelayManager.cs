@@ -28,10 +28,12 @@ public class RelayManager : MonoBehaviour
 
         if (!AuthenticationService.Instance.IsSignedIn)
         {            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            hostButton.onClick.AddListener(()=> _ = CreateRelayAsync());
-            joinButton.onClick.AddListener(() => _ = JoinRelayAsync(joinInput.text));
         }
 
+        hostButton.onClick.RemoveAllListeners();
+        joinButton.onClick.RemoveAllListeners();
+        hostButton.onClick.AddListener(() => _ = CreateRelayAsync());
+        joinButton.onClick.AddListener(() => _ = JoinRelayAsync(joinInput.text));
 
     }
 
