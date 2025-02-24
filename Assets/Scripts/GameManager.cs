@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     //Timer
     [SerializeField] private Timer mTimer;
-    public Timer Timer;
+    public Timer Timer => mTimer;
 
     private Vector2[] gridPositions;
     public Vector2[] GridPositions {  get { return gridPositions; } set { gridPositions = value; } }
