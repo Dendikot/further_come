@@ -108,10 +108,13 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject[] mBodies;
 
+    private bool mGameFinished = false;
+
     private void OnEnable()
     {
         mNetworkManager.OnClientConnectedCallback += onClientConnected;
         mNetworkManager.OnClientDisconnectCallback += gameEndReset;
+        mGameFinished = false;
 
         //Place network code here
 
@@ -196,11 +199,13 @@ public class GameManager : MonoBehaviour
     private void onGameFinished()
     {
         //Debug.Log("shutdown");
+        mGameFinished = true;
         mNetworkManager.Shutdown();
     }
 
     private void gameEndReset(ulong id)
     {
+        if (!mGameFinished) return;
         Destroy(mNetworkManager.gameObject);
         //Debug.Log("game reset");
         SceneManager.LoadScene("endgame_scene", LoadSceneMode.Single);

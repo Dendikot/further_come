@@ -8,6 +8,9 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine.UI;
 using Unity.Services.Authentication;
+using System.Threading;
+using System;
+using System.Threading.Tasks;
 
 public class RelayManager : MonoBehaviour
 {
@@ -18,25 +21,73 @@ public class RelayManager : MonoBehaviour
 
     private async void Start()
     {
-        await UnityServices.InitializeAsync();
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+        {
+            await UnityServices.InitializeAsync();
+        }
 
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            hostButton.onClick.AddListener(()=> _ = CreateRelayAsync());
+            joinButton.onClick.AddListener(() => JoinRelay(joinInput.text));
+        }
 
-        hostButton.onClick.AddListener(CreateRelay);
-        joinButton.onClick.AddListener(()=> JoinRelay(joinInput.text));
+
     }
 
-    async void CreateRelay()
+    private static SemaphoreSlim _relayLock = new SemaphoreSlim(1, 1);
+    private CancellationTokenSource _cancellationTokenSource;
+
+    async Task CreateRelayAsync()
     {
-        Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2);
-        string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-        codeText.text= "" + joinCode;
+        if (!_relayLock.Wait(0))
+        {
+            Debug.LogWarning("CreateRelayAsync is already running. Restarting the relay...");
+        
+            // Cancel the previous relay creation process
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+        }
+        else
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+        }
 
-        var relayServerData = AllocationUtils.ToRelayServerData(allocation, "dtls");
+        try
+        {
+            // If a previous instance exists, shut it down
+            if (NetworkManager.Singleton.IsHost)
+            {
+                Debug.Log("Stopping previous host...");
+                NetworkManager.Singleton.Shutdown();
+            }
 
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+            // Start new relay creation
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2);
+            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            codeText.text = joinCode;
 
-        NetworkManager.Singleton.StartHost();
+            var relayServerData = AllocationUtils.ToRelayServerData(allocation, "dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
+            // Check if the task has been canceled before starting the new host
+            if (_cancellationTokenSource.Token.IsCancellationRequested)
+            {
+                Debug.LogWarning("Relay creation was canceled before starting the new host.");
+                return;
+            }
+
+            NetworkManager.Singleton.StartHost();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to create relay: {ex.Message}");
+        }
+        finally
+        {
+            _relayLock.Release();
+        }
     }
 
     async void JoinRelay(string joinCode)
