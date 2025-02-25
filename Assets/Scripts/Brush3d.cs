@@ -199,6 +199,12 @@ public class Brush3d : NetworkBehaviour
         mGameManager.CleanTheMap();
     }
 
+    [ClientRpc]
+    public void StopTimerClientRpc()
+    {
+        mGameManager.StopTimer();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         other.gameObject.SetActive(false);
@@ -211,7 +217,8 @@ public class Brush3d : NetworkBehaviour
             {
                 mCollectedCells = 0;
 
-                mGameManager.StopTimer();
+                //mGameManager.StopTimer();
+                StopTimerClientRpc();
             }
         }
     }

@@ -144,6 +144,10 @@ public class GameManager : MonoBehaviour
             mTimer.timerFinished.AddListener(onSecondRound);
 
             mBrush3dLocalServer.SendVectorsServerRpc(spawnPositions, 1);
+        } else
+        {
+            mTimer.StartTimer(inBetweenTimer);
+            mTimer.timerFinished.AddListener(onSecondRound);
         }
     }
     
@@ -269,7 +273,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L) && mNetworkManager.IsServer)
         {
-            mTimer.StopTimer();
+            //mTimer.StopTimer();
             //Debug.Log("IS SERVER");
             //mBrush3dLocalServer.SendVectorsServerRpc(GridPositions, 1);
         }
