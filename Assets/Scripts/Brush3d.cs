@@ -202,9 +202,9 @@ public class Brush3d : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         other.gameObject.SetActive(false);
-
         if (other.tag == "Cell" && mRole == Roles.Leader && mGameManager.Timer.isActiveAndEnabled)
         {
+            other.gameObject.SetActive(false);
             mCollectedCells++;
 
             if (mCollectedCells == mGameManager.ObjectsSpawned)

@@ -189,10 +189,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: graphics_circles
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a9c319e7253939943b15e98cc8a0fb0b, type: 3}
+      propertyPath: m_TagString
+      value: Cell
+      objectReference: {fileID: 0}
     - target: {fileID: 7071182760956848314, guid: a9c319e7253939943b15e98cc8a0fb0b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 29fb0e5fc657586408ca2691ac57243f, type: 2}
+    - target: {fileID: 8513859187771203891, guid: a9c319e7253939943b15e98cc8a0fb0b, type: 3}
+      propertyPath: m_TagString
+      value: Cell
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -5568371526223589888, guid: a9c319e7253939943b15e98cc8a0fb0b, type: 3}
