@@ -173,7 +173,7 @@ public class Brush3d : NetworkBehaviour
         mGameManager.SwitchRoles();
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void SendVectorsServerRpc(Vector2[] vectors, ulong clientId)
     {
         SendVectorsClientRpc(vectors, clientId);
