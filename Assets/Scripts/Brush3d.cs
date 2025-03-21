@@ -62,7 +62,6 @@ public class Brush3d : NetworkBehaviour
 
     private void OnDestroy()
     {
-        currentBodyIndex.OnValueChanged -= OnBodyIndexChanged;
     }
 
     private void OnBodyIndexChanged(int oldValue, int newValue)
